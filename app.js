@@ -26,8 +26,9 @@ async function main() {
     await mongoose.connect(dbUrl);
     console.log("connected to db");
 
-    app.listen(8080, () => {
-        console.log("server is listening to port 8080");
+    const port = process.env.PORT || 8080;
+    app.listen(port, () => {
+    console.log(`server is listening to port ${port}`);
     });
 }
 
@@ -44,7 +45,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 const store = new MongoStore({
     mongoUrl: dbUrl,
     crypto: {
-        secret: process.env.secret,
+        secret: process.env.SECRET,
     },
     touchAfter: 24 * 3600,
 });
@@ -55,7 +56,7 @@ store.on("error", (err) => {
 
 const sessionOptions = {
     store,
-    secret: process.env.secret,
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
